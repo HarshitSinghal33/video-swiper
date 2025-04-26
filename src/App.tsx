@@ -1,7 +1,8 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, EffectCoverflow } from "swiper/modules";
+import Slide from "./components/Slide";
 import "./App.css";
-import Slide from "./components/slide";
+
 const videosUrl = [
   "/01video.mp4",
   "/02video.mp4",
@@ -10,6 +11,7 @@ const videosUrl = [
   "/05video.mp4",
   "/06video.mp4",
 ];
+
 export default () => {
   return (
     <Swiper

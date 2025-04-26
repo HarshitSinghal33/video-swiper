@@ -1,6 +1,6 @@
 @import "swiper/css";
-@import 'swiper/css/navigation';
-@import 'swiper/css/effect-coverflow';
+@import "swiper/css/navigation";
+@import "swiper/css/effect-coverflow";
 
 #app {
   height: 100%;
@@ -31,4 +31,24 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.video-button {
+  padding: 12px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.video-button-wrapper {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 60%;
 }
