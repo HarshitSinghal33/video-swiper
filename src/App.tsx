@@ -1,7 +1,15 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, EffectCoverflow } from "swiper/modules";
-import "./app.css";
-
+import "./App.css";
+import Slide from "./components/slide";
+const videosUrl = [
+  "/01video.mp4",
+  "/02video.mp4",
+  "/03video.mp4",
+  "/04video.mp4",
+  "/05video.mp4",
+  "/06video.mp4",
+];
 export default () => {
   return (
     <Swiper
@@ -16,7 +24,6 @@ export default () => {
         stretch: 0,
         depth: 100,
         modifier: 1,
-        slideShadows: true,
         scale: 1,
       }}
       direction="horizontal"
@@ -24,12 +31,11 @@ export default () => {
       onSlideChange={() => console.log("slide change")}
       className="swiper"
     >
-      <SwiperSlide>Slide 1</SwiperSlide>
-      <SwiperSlide>Slide 2</SwiperSlide>
-      <SwiperSlide>Slide 3</SwiperSlide>
-      <SwiperSlide>Slide 4</SwiperSlide>
-      <SwiperSlide>Slide 5</SwiperSlide>
-      <SwiperSlide>Slide 6</SwiperSlide>
+      {videosUrl.map((videoUrl) => (
+        <SwiperSlide>
+          <Slide videoUrl={videoUrl} />
+        </SwiperSlide>
+      ))}
     </Swiper>
   );
 };
