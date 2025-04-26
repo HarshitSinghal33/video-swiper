@@ -30,7 +30,7 @@ export default () => {
       }}
       direction="horizontal"
       onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log("slide change")}
+      onSlideChange={(index) => console.log("slide change", index)}
       className="swiper"
     >
       {videosUrl.map((videoUrl) => (

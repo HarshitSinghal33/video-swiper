@@ -52,3 +52,16 @@ body {
   justify-content: space-between;
   height: 60%;
 }
+
+video{
+  border-radius: 10px;
+}
+
+.addToCart-button{
+  all: unset;
+  width: 100%;
+  background: black;
+  display: block;
+  color: white;
+  padding: 12px 0;
+}
