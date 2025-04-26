@@ -20,8 +20,14 @@ body {
   padding: 0;
 }
 
+#root{
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
 .swiper {
-  width: 100%;
+  width: 50%;
 }
 
 .swiper-slide {
@@ -34,6 +40,7 @@ body {
 }
 
 .video-button {
+  all: unset;
   padding: 12px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.6);
@@ -53,10 +60,6 @@ body {
   height: 60%;
 }
 
-video{
-  border-radius: 10px;
-}
-
 .addToCart-button{
   all: unset;
   width: 100%;
@@ -64,4 +67,15 @@ video{
   display: block;
   color: white;
   padding: 12px 0;
+}
+
+.like, .share{
+  z-index: 10;
+  position: relative;
+}
+
+@media screen and (max-width: 720px) {
+  .swiper {
+    width: 100%;
+  }
 }

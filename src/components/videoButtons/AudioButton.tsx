@@ -2,14 +2,14 @@ import { FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { iconValues } from "../../lib/constants";
 
 interface AudioButtonProps {
-  isVolume?: Boolean;
+  isMuted?: Boolean;
 }
 
-const AudioButton: React.FC<AudioButtonProps> = ({ isVolume }) => {
+const AudioButton: React.FC<AudioButtonProps> = ({ isMuted }) => {
   return (
-    <div className="video-button">
-      {isVolume ? <FaVolumeUp {...iconValues} /> : <FaVolumeMute {...iconValues} />}
-    </div>
+    <button className="video-button">
+      {isMuted ? <FaVolumeMute {...iconValues} /> : <FaVolumeUp {...iconValues} />}
+    </button>
   );
 };
 

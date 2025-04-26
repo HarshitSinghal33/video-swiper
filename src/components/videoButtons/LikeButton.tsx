@@ -1,19 +1,21 @@
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { iconValues } from "../../lib/constants";
+import { useState } from "react";
 
-interface LikeButtonProps {
-  isLiked?: Boolean;
-}
-
-const LikeButton: React.FC<LikeButtonProps> = ({ isLiked = false }) => {
+const LikeButton = () => {
+  const [isLiked, setIsLiked] = useState(false);
+  const handleLikeToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsLiked((prev) => !prev);
+  };
   return (
-    <div className="video-button">
+    <button className="video-button like" onClick={handleLikeToggle}>
       {isLiked ? (
         <IoMdHeart {...iconValues} />
       ) : (
         <IoMdHeartEmpty {...iconValues} />
       )}
-    </div>
+    </button>
   );
 };
 
