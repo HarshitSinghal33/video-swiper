@@ -2,6 +2,12 @@
 @import "swiper/css/navigation";
 @import "swiper/css/effect-coverflow";
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 #app {
   height: 100%;
 }
@@ -20,8 +26,10 @@ body {
   padding: 0;
 }
 
-.swiper {
-  width: 100%;
+.video-container {
+  display: grid;
+  place-items: center;
+  height: 100vh;
 }
 
 .swiper-slide {
@@ -31,24 +39,4 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.video-button {
-  padding: 12px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.6);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  margin-top: 15px;
-}
-
-.video-button-wrapper {
-  position: absolute;
-  top: 0px;
-  right: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 60%;
 }
