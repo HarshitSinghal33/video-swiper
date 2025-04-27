@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import InnerVideoContainer from "./InnerVideoContainer";
 import Loader from "./shared/Loader";
@@ -7,36 +7,60 @@ import useFetchVideos from "../hooks/UseFetchVideos";
 
 const OuterVideoContainer = () => {
   const { videos, isLoading, fetchVideos } = useFetchVideos();
-  const videoPerSection = Math.floor(window.innerWidth / 180);
+  const [isMuted, setIsMuted] = useState(true);
+  const [videoPerSection, setVideoPerSection] = useState(
+    Math.min(Math.floor(window.innerWidth / 180), 10)
+  );
   const [currentSection, setCurrentSection] = useState(1);
   const [innerContainerShow, setInnerContainerShow] = useState(false);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
 
-  const handleInnerContainerShow = (index: number) => {
+  const toggleMute = useCallback(() => {
+    setIsMuted((prev) => !prev);
+  }, []);
+
+  const handleInnerContainerShow = useCallback((index: number) => {
     setInnerContainerShow(true);
     setSelectedVideoIndex(index);
-  };
+  }, []);
 
-  const handleInnerContainerHide = () => {
+  const handleInnerContainerHide = useCallback(() => {
     setInnerContainerShow(false);
-  };
+  }, []);
 
-  const prevSection = () => {
+  const prevSection = useCallback(() => {
     if (currentSection > 1) {
       setCurrentSection((prev) => prev - 1);
     }
-  };
+  }, [currentSection]);
 
-  const nextSection = () => {
+  const nextSection = useCallback(() => {
     const maxSections = Math.ceil(videos.length / videoPerSection);
     if (currentSection < maxSections) {
       setCurrentSection((prev) => prev + 1);
     }
-  };
+  }, [currentSection, videos.length, videoPerSection]);
+
+  const handleResize = useCallback(() => {
+    const newVideoPerSection = Math.floor(window.innerWidth / 180);
+    setVideoPerSection(Math.min(newVideoPerSection, 10));
+
+    const maxSections = Math.ceil(videos.length / newVideoPerSection);
+    if (currentSection > maxSections) {
+      setCurrentSection(maxSections || 1);
+    }
+  }, [videos.length, currentSection]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
 
   useEffect(() => {
     fetchVideos();
-  }, []);
+  }, [fetchVideos]);
 
   useEffect(() => {
     const allVideos = document.querySelectorAll<HTMLVideoElement>("video");
@@ -46,10 +70,22 @@ const OuterVideoContainer = () => {
       });
     } else {
       allVideos.forEach((video) => {
-        video.play();
+        video.play().catch((err) => console.error("Video play error:", err));
       });
     }
   }, [innerContainerShow]);
+
+  const videosToDisplay = useMemo(() => {
+    return videos.slice(
+      (currentSection - 1) * videoPerSection,
+      currentSection * videoPerSection
+    );
+  }, [videos, currentSection, videoPerSection]);
+
+  const maxSections = useMemo(
+    () => Math.ceil(videos.length / videoPerSection),
+    [videos.length, videoPerSection]
+  );
 
   if (isLoading) return <Loader />;
   if (videos.length <= 0) return <div>No video Found</div>;
@@ -63,26 +99,22 @@ const OuterVideoContainer = () => {
       )}
 
       <div className="video-slider">
-        {videos
-          .slice(
-            (currentSection - 1) * videoPerSection,
-            currentSection * videoPerSection
-          )
-          .map((video, index) => (
-            <div
-              className="video-wrapper"
-              key={video.id}
-              onClick={() =>
-                handleInnerContainerShow(
-                  (currentSection - 1) * videoPerSection + index
-                )
-              }
-            >
-              <video autoPlay muted loop>
-                <source src={video.url} type="video/mp4" />
-              </video>
-            </div>
-          ))}
+        {videosToDisplay.map((video, index) => (
+          <div
+            className="video-wrapper"
+            key={video.id}
+            onClick={() =>
+              handleInnerContainerShow(
+                (currentSection - 1) * videoPerSection + index
+              )
+            }
+          >
+            
+            <video autoPlay muted loop>
+              <source src={video.url} type="video/mp4" />
+            </video>
+          </div>
+        ))}
       </div>
 
       {innerContainerShow && (
@@ -90,10 +122,12 @@ const OuterVideoContainer = () => {
           videos={videos}
           initialIndex={selectedVideoIndex}
           handleInnerContainerHide={handleInnerContainerHide}
+          isMuted={isMuted}
+          toggleMute={toggleMute}
         />
       )}
 
-      {!(currentSection >= Math.ceil(videos.length / videoPerSection)) && (
+      {currentSection < maxSections && (
         <button className="nav-button right" onClick={nextSection}>
           <FaChevronRight size={40} />
         </button>
@@ -132,7 +166,7 @@ const Wrapper = styled.div`
   }
 
   .nav-button.right {
-    right: 10px;
+    right: 0px;
   }
 
   .video-slider {
@@ -141,8 +175,8 @@ const Wrapper = styled.div`
   }
 
   .video-wrapper {
-    min-width: 200px;
-    min-height: 300px;
+    width: 200px;
+    height: 300px;
     border-radius: 10px;
     background-color: black;
   }

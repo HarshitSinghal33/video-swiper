@@ -1,8 +1,9 @@
 import VideoController from "../videoControllers";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import VideoTimingLine from "./VideoTimingLine";
 import styled from "styled-components";
 import { VideoProps } from "../../hooks/UseFetchVideos";
+import Loader from "../shared/Loader";
 
 interface VideoContainerProps {
   isActive: boolean;
@@ -34,14 +35,14 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
     }
   };
 
-  const toggleVideosMute = () => {
+  const toggleVideosMute = useCallback(() => {
     handleMute();
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
     }
-  };
+  }, []);
 
-  const toggleVideoPlay = () => {
+  const toggleVideoPlay = useCallback(() => {
     const videoElement = videoRef.current;
     if(isVideoPlaying){
       videoElement?.pause();
@@ -50,28 +51,38 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
       videoElement?.play();
       setIsVideoPlaying(true);
     }
-  }
+  }, [])
 
   useEffect(() => {
     const videoElement = videoRef.current;
     if (videoElement) {
-      setTotalVideoTime(videoElement.duration);
+      if (videoElement.duration) {
+        setTotalVideoTime(videoElement.duration);
+      }
+      
+      const handleMetadata = () => {
+        setTotalVideoTime(videoElement.duration);
+      };
+      
       if (isActive) {
         videoElement.play();
       } else {
         videoElement.pause();
       }
+      
+      videoElement.addEventListener("loadedmetadata", handleMetadata);
       videoElement.addEventListener("timeupdate", handleTimeUpdate);
+      
+      return () => {
+        if (videoElement) {
+          videoElement.removeEventListener("loadedmetadata", handleMetadata);
+          videoElement.removeEventListener("timeupdate", handleTimeUpdate);
+        }
+      };
     }
+  }, [isActive, videoRef]);
 
-    return () => {
-      if (videoElement) {
-        videoElement.removeEventListener("timeupdate", handleTimeUpdate);
-      }
-    };
-  }, [isActive, videoRef]);  
-
-  if(!isInSlide) return null;
+  if(!isInSlide) return <Loader />;
 
   return (
     <Wrapper $isActive={isActive}>
@@ -87,7 +98,7 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
         toggleVideosMute={toggleVideosMute}
         video={video}
       />
-      <video ref={videoRef} muted={isMuted} height={"500px"} loop>
+      <video ref={videoRef} muted={isMuted} loop>
         <source src={video.url} type="video/mp4" />
       </video>
     </Wrapper>

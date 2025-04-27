@@ -1,11 +1,13 @@
 @import "swiper/css";
 @import "swiper/css/navigation";
 @import "swiper/css/effect-coverflow";
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 #app {
   height: 100%;
 }
@@ -24,13 +26,11 @@ body {
   padding: 0;
 }
 
-#root {
+.video-container {
   display: grid;
   place-items: center;
   height: 100vh;
 }
-
-
 
 .swiper-slide {
   text-align: center;
@@ -39,42 +39,4 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-/* .video-button {
-  all: unset;
-  padding: 12px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.6);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  margin-top: 15px;
-  z-index: 10;
-  position: relative;
-}
-
-.video-button-wrapper {
-  position: absolute;
-  top: 0px;
-  right: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 60%;
-} */
-
-.addToCart-button {
-  all: unset;
-  width: 100%;
-  background: black;
-  display: block;
-  color: white;
-  padding: 12px 0;
-}
-
-@media screen and (max-width: 1000px) {
-  .swiper {
-    width: 100%;
-  }
 }

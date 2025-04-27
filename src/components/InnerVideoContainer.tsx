@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { EffectCoverflow, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { VideoProps } from "../hooks/UseFetchVideos";
@@ -10,23 +10,22 @@ interface InnerContainerProps {
   videos: VideoProps[];
   initialIndex: number;
   handleInnerContainerHide: () => void;
+  isMuted: boolean;
+  toggleMute: () => void;
 }
 
 const InnerVideoContainer: React.FC<InnerContainerProps> = ({
   videos,
+  toggleMute,
+  isMuted,
   initialIndex,
   handleInnerContainerHide,
 }) => {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-  const [isMuted, setIsMuted] = useState(true);
 
-  const handleActiveSlide = (activeIndex: number) => {
+  const handleActiveSlide = useCallback((activeIndex: number) => {
     setActiveSlideIndex(activeIndex);
-  };
-
-  const handleMute = () => {
-    setIsMuted((prev) => !prev);
-  };
+  },[]);
 
   return (
     <Wrapper>
@@ -60,7 +59,7 @@ const InnerVideoContainer: React.FC<InnerContainerProps> = ({
               <SwiperSlide key={video.id}>
                 <VideoContainer
                   video={video}
-                  handleMute={handleMute}
+                  handleMute={toggleMute}
                   isMuted={isMuted}
                   isActive={index === activeSlideIndex}
                   isInSlide={

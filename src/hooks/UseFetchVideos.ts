@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import authAxios from "../lib/authAxios";
 import { toast } from "react-toastify";
 
@@ -15,7 +15,7 @@ const useFetchVideos = () => {
   const [videos, setVideos] = useState<VideoProps[]>([]);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const fetchVideos = async () => {
+  const fetchVideos = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await authAxios.get("/videos");
@@ -26,7 +26,7 @@ const useFetchVideos = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   return { videos, error, isLoading, fetchVideos };
 };

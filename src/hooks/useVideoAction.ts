@@ -17,7 +17,7 @@ const useLikeAction = (videoId: string) => {
     } catch (error) {
       toast.error("An error occurred whle liking video");
     }
-  }, [videoId]);
+  }, []);
 
   const handleUnlikeVideo = useCallback(async () => {
     try {
@@ -30,7 +30,7 @@ const useLikeAction = (videoId: string) => {
     } catch (error) {
       toast.error("An error occurred whle liking video");
     }
-  },[videoId]);
+  },[]);
 
   const handleCheckLiked = useCallback(async () => {
     try {
