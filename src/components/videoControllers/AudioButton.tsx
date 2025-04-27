@@ -3,11 +3,12 @@ import { iconValues } from "../../lib/constants";
 
 interface AudioButtonProps {
   isMuted?: Boolean;
+  toggleVideosMute: () => void;
 }
 
-const AudioButton: React.FC<AudioButtonProps> = ({ isMuted }) => {
+const AudioButton: React.FC<AudioButtonProps> = ({ isMuted, toggleVideosMute }) => {
   return (
-    <button className="video-button">
+    <button onClick={toggleVideosMute}>
       {isMuted ? <FaVolumeMute {...iconValues} /> : <FaVolumeUp {...iconValues} />}
     </button>
   );

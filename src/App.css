@@ -1,7 +1,11 @@
 @import "swiper/css";
 @import "swiper/css/navigation";
 @import "swiper/css/effect-coverflow";
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 #app {
   height: 100%;
 }
@@ -20,15 +24,13 @@ body {
   padding: 0;
 }
 
-#root{
+#root {
   display: grid;
   place-items: center;
   height: 100vh;
 }
 
-.swiper {
-  width: 50%;
-}
+
 
 .swiper-slide {
   text-align: center;
@@ -39,7 +41,7 @@ body {
   align-items: center;
 }
 
-.video-button {
+/* .video-button {
   all: unset;
   padding: 12px;
   border-radius: 50%;
@@ -48,6 +50,8 @@ body {
   place-items: center;
   cursor: pointer;
   margin-top: 15px;
+  z-index: 10;
+  position: relative;
 }
 
 .video-button-wrapper {
@@ -58,9 +62,9 @@ body {
   flex-direction: column;
   justify-content: space-between;
   height: 60%;
-}
+} */
 
-.addToCart-button{
+.addToCart-button {
   all: unset;
   width: 100%;
   background: black;
@@ -69,12 +73,7 @@ body {
   padding: 12px 0;
 }
 
-.like, .share{
-  z-index: 10;
-  position: relative;
-}
-
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 1000px) {
   .swiper {
     width: 100%;
   }

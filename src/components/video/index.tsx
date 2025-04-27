@@ -1,13 +1,15 @@
-import VideoController from "../videoButtons";
+import VideoController from "../videoControllers";
 import { useEffect, useRef, useState } from "react";
 import VideoTimingLine from "./VideoTimingLine";
 import styled from "styled-components";
+import { VideoProps } from "../../hooks/UseFetchVideos";
 
 interface VideoContainerProps {
-  videoUrl: string;
   isActive: boolean;
   isMuted: boolean;
   handleMute: () => void;
+  video: VideoProps;
+  isInSlide: boolean;
 }
 
 interface StyledWrapperProps {
@@ -15,12 +17,14 @@ interface StyledWrapperProps {
 }
 
 const VideoContainer: React.FC<VideoContainerProps> = ({
-  videoUrl,
   isActive,
   isMuted,
   handleMute,
+  video,
+  isInSlide
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [playedTime, setPlayedTime] = useState(0);
   const [totalVideoTime, setTotalVideoTime] = useState(0);
 
@@ -30,12 +34,23 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
     }
   };
 
-  const toggleMute = () => {
+  const toggleVideosMute = () => {
     handleMute();
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
     }
   };
+
+  const toggleVideoPlay = () => {
+    const videoElement = videoRef.current;
+    if(isVideoPlaying){
+      videoElement?.pause();
+      setIsVideoPlaying(false);
+    }else{
+      videoElement?.play();
+      setIsVideoPlaying(true);
+    }
+  }
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -54,17 +69,26 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
         videoElement.removeEventListener("timeupdate", handleTimeUpdate);
       }
     };
-  }, [isActive, videoRef]);
+  }, [isActive, videoRef]);  
+
+  if(!isInSlide) return null;
 
   return (
-    <Wrapper onClick={toggleMute} $isActive={isActive}>
+    <Wrapper $isActive={isActive}>
       <VideoTimingLine
         isActive={isActive}
         loadedPercentage={Math.floor((playedTime / totalVideoTime) * 100)}
       />
-      <VideoController isActive={isActive} isMuted={isMuted} />
-      <video ref={videoRef} muted={isMuted} loop>
-        <source src={videoUrl} type="video/mp4" />
+      <VideoController
+        toggleVideoPlay={toggleVideoPlay}
+        isActive={isActive}
+        isPlaying={isVideoPlaying}
+        isMuted={isMuted}
+        toggleVideosMute={toggleVideosMute}
+        video={video}
+      />
+      <video ref={videoRef} muted={isMuted} height={"500px"} loop>
+        <source src={video.url} type="video/mp4" />
       </video>
     </Wrapper>
   );
