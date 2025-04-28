@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { EffectCoverflow, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { VideoProps } from "../hooks/UseFetchVideos";
-import VideoContainer from "./video";
+import VideoContainer from "./innerVideo";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
 

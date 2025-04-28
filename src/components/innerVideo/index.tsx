@@ -4,6 +4,7 @@ import VideoTimingLine from "./VideoTimingLine";
 import styled from "styled-components";
 import { VideoProps } from "../../hooks/UseFetchVideos";
 import Loader from "../shared/Loader";
+import Video from "../shared/Video";
 
 interface VideoContainerProps {
   isActive: boolean;
@@ -98,9 +99,7 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
         toggleVideosMute={toggleVideosMute}
         video={video}
       />
-      <video ref={videoRef} muted={isMuted} loop>
-        <source src={video.url} type="video/mp4" />
-      </video>
+      <Video ref={videoRef} muted={isMuted} loop={true} src={video.url} />
     </Wrapper>
   );
 };

@@ -4,6 +4,7 @@ import InnerVideoContainer from "./InnerVideoContainer";
 import Loader from "./shared/Loader";
 import styled, { keyframes } from "styled-components";
 import useFetchVideos from "../hooks/UseFetchVideos";
+import Video from "./shared/Video";
 
 const OuterVideoContainer = () => {
   const { videos, isLoading, fetchVideos } = useFetchVideos();
@@ -112,9 +113,7 @@ const OuterVideoContainer = () => {
               )
             }
           >
-            <video autoPlay muted loop>
-              <source src={video.url} type="video/mp4" />
-            </video>
+            <Video autoPlay={true} muted={true} loop={true} src={video.url}/>
           </VideoWrapper>
         ))}
       </div>
@@ -194,11 +193,4 @@ const VideoWrapper = styled.div<{ direction: "left" | "right" }>`
   );
   opacity: 0;
   animation: ${animate} 0.5s ease-out forwards;
-
-  video {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    object-fit: cover;
-  }
 `;
