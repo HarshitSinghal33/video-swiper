@@ -76,7 +76,7 @@ const StyledModal = styled.div`
 
   .close-button {
     position: absolute;
-    top: -10px;
+    top: 0px;
     right: 3px;
     background: transparent;
     border: none;

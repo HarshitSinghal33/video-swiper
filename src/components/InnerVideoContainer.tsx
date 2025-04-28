@@ -62,11 +62,6 @@ const InnerVideoContainer: React.FC<InnerContainerProps> = ({
                   handleMute={toggleMute}
                   isMuted={isMuted}
                   isActive={index === activeSlideIndex}
-                  isInSlide={
-                    index === activeSlideIndex - 1 ||
-                    index === activeSlideIndex ||
-                    index === activeSlideIndex + 1
-                  }
                 />
               </SwiperSlide>
             );

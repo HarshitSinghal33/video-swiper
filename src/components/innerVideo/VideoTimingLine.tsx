@@ -28,6 +28,7 @@ const TimeLineWrapper = styled.div<TimeLineWrapperProps>`
   width: 90%;
   height: 3px;
   position: absolute;
+  z-index: 20;
   top: 5px;
   .loadedLine {
     background: white;

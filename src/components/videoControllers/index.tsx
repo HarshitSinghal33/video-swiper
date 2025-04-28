@@ -4,6 +4,7 @@ import AudioButton from "./AudioButton";
 import LikeButton from "./LikeButton";
 import PlayButton from "./PlayButton";
 import ShareButton from "./ShareButton";
+import { memo } from "react";
 
 interface VideoControllerProps {
   isActive: boolean;
@@ -38,7 +39,7 @@ const VideoController: React.FC<VideoControllerProps> = ({
   );
 };
 
-export default VideoController;
+export default memo(VideoController);
 
 const StyledWrapper = styled.div`
   position: absolute;
@@ -49,11 +50,14 @@ const StyledWrapper = styled.div`
   justify-content: space-between;
   height: 60%;
   width: 90%;
+  z-index: 10;
 
   .video-controllers {
     display: flex;
     width: 100%;
     justify-content: space-between;
+    top: 15px;
+    position: relative;
   }
 
   button {
@@ -64,8 +68,6 @@ const StyledWrapper = styled.div`
     display: grid;
     place-items: center;
     cursor: pointer;
-    margin-top: 15px;
-    z-index: 10;
     position: relative;
   }
 

@@ -28,7 +28,7 @@ const useFetchVideos = () => {
     }
   }, []);
 
-  return { videos, error, isLoading, fetchVideos };
+  return { videos, error, isLoading, fetchVideos, setVideos };
 };
 
 export default useFetchVideos;

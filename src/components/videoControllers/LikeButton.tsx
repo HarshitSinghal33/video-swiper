@@ -10,31 +10,23 @@ interface LikeButtonProps {
 
 const LikeButton: React.FC<LikeButtonProps> = ({ video }) => {
   const {
-    handleLikeVideo,
-    handleUnlikeVideo,
+    handleToggleLike,
     likeCount,
     setLikeCount,
     handleCheckLiked,
     isLiked,
   } = useLikeAction(video.id);
-  const handleLikeToggle = async () => {
-    if (isLiked) {
-      await handleUnlikeVideo();
-    } else {
-      await handleLikeVideo();
-    }
-  };
 
   const fetchIsLike = async () => await handleCheckLiked();
 
   useEffect(() => {
     fetchIsLike();
     setLikeCount(video.likeCount);
-  }, [video]);
+  }, []);
 
   return (
-    <div>
-      <button onClick={handleLikeToggle}>
+    <>
+      <button onClick={handleToggleLike}>
         {isLiked ? (
           <IoMdHeart {...iconValues} />
         ) : (
@@ -42,7 +34,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ video }) => {
         )}
       </button>
       <div className="count">{likeCount}</div>
-    </div>
+    </>
   );
 };
 
