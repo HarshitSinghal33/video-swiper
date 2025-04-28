@@ -2,12 +2,13 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import InnerVideoContainer from "./InnerVideoContainer";
 import Loader from "./shared/Loader";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import useFetchVideos from "../hooks/UseFetchVideos";
 
 const OuterVideoContainer = () => {
   const { videos, isLoading, fetchVideos } = useFetchVideos();
   const [isMuted, setIsMuted] = useState(true);
+  const [direction, setDirection] = useState<"left" | "right">("right");
   const [videoPerSection, setVideoPerSection] = useState(
     Math.min(Math.floor(window.innerWidth / 180), 10)
   );
@@ -30,6 +31,7 @@ const OuterVideoContainer = () => {
 
   const prevSection = useCallback(() => {
     if (currentSection > 1) {
+      setDirection("left");
       setCurrentSection((prev) => prev - 1);
     }
   }, [currentSection]);
@@ -37,6 +39,7 @@ const OuterVideoContainer = () => {
   const nextSection = useCallback(() => {
     const maxSections = Math.ceil(videos.length / videoPerSection);
     if (currentSection < maxSections) {
+      setDirection("right");
       setCurrentSection((prev) => prev + 1);
     }
   }, [currentSection, videos.length, videoPerSection]);
@@ -100,8 +103,8 @@ const OuterVideoContainer = () => {
 
       <div className="video-slider">
         {videosToDisplay.map((video, index) => (
-          <div
-            className="video-wrapper"
+          <VideoWrapper
+            direction={direction}
             key={video.id}
             onClick={() =>
               handleInnerContainerShow(
@@ -109,11 +112,10 @@ const OuterVideoContainer = () => {
               )
             }
           >
-            
             <video autoPlay muted loop>
               <source src={video.url} type="video/mp4" />
             </video>
-          </div>
+          </VideoWrapper>
         ))}
       </div>
 
@@ -137,6 +139,13 @@ const OuterVideoContainer = () => {
 };
 
 export default OuterVideoContainer;
+
+const animate = keyframes`
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -173,13 +182,18 @@ const Wrapper = styled.div`
     display: flex;
     gap: 20px;
   }
+`;
 
-  .video-wrapper {
-    width: 200px;
-    height: 300px;
-    border-radius: 10px;
-    background-color: black;
-  }
+const VideoWrapper = styled.div<{ direction: "left" | "right" }>`
+  width: 200px;
+  height: 300px;
+  border-radius: 10px;
+  background-color: black;
+  transform: translateX(
+    ${(props) => (props.direction === "left" ? "-100px" : "100px")}
+  );
+  opacity: 0;
+  animation: ${animate} 0.5s ease-out forwards;
 
   video {
     width: 100%;
