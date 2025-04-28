@@ -14,13 +14,13 @@ const Video = forwardRef<HTMLVideoElement, VideoProps>(
     const [loading, setLoading] = useState(true);
 
     return (
-      <>
+      <VideoWrapper>
         {loading && (
-          <LoaderWrapper>
+          <div className="loader">
             <Loader />
-          </LoaderWrapper>
+          </div>
         )}
-        <VideoElement
+        <video
           ref={ref}
           autoPlay={autoPlay}
           muted={muted}
@@ -29,25 +29,28 @@ const Video = forwardRef<HTMLVideoElement, VideoProps>(
           style={{ visibility: loading ? "hidden" : "visible" }}
         >
           <source src={src} type="video/mp4" />
-        </VideoElement>
-      </>
+        </video>
+      </VideoWrapper>
     );
   }
 );
 
 export default Video;
 
-const LoaderWrapper = styled.div`
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const VideoElement = styled.video`
+const VideoWrapper = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  object-fit: cover;
+  .loader {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    background: rgba(0,0,0,0.45)
+  }
+  video {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+  }
 `;

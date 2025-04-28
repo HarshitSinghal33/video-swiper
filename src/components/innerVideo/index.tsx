@@ -23,7 +23,7 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
   isMuted,
   handleMute,
   video,
-  isInSlide
+  isInSlide,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
@@ -45,14 +45,9 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
 
   const toggleVideoPlay = useCallback(() => {
     const videoElement = videoRef.current;
-    if(isVideoPlaying){
-      videoElement?.pause();
-      setIsVideoPlaying(false);
-    }else{
-      videoElement?.play();
-      setIsVideoPlaying(true);
-    }
-  }, [])
+    isVideoPlaying ? videoElement?.pause() : videoElement?.play();
+    setIsVideoPlaying((prev) => !prev);
+  }, [videoRef, isVideoPlaying]);
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -60,20 +55,20 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
       if (videoElement.duration) {
         setTotalVideoTime(videoElement.duration);
       }
-      
+
       const handleMetadata = () => {
         setTotalVideoTime(videoElement.duration);
       };
-      
+
       if (isActive) {
         videoElement.play();
       } else {
         videoElement.pause();
       }
-      
+
       videoElement.addEventListener("loadedmetadata", handleMetadata);
       videoElement.addEventListener("timeupdate", handleTimeUpdate);
-      
+
       return () => {
         if (videoElement) {
           videoElement.removeEventListener("loadedmetadata", handleMetadata);
@@ -83,7 +78,7 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
     }
   }, [isActive, videoRef]);
 
-  if(!isInSlide) return <Loader />;
+  if (!isInSlide) return <Loader />;
 
   return (
     <Wrapper $isActive={isActive}>
@@ -113,4 +108,11 @@ const Wrapper = styled.div<StyledWrapperProps>`
   display: grid;
   place-items: center;
   pointer-events: ${(props) => (props.$isActive ? "all" : "none")};
+
+  video {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+  }
 `;
