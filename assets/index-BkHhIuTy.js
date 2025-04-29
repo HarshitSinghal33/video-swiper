@@ -260,7 +260,9 @@ Error generating stack: `+n.message+`
   }
 
   @media screen and (max-width: 500px) {
-    align-self: center;
+    .close-icon{
+      align-self: center;
+    }
   }
 
   .swiper {
