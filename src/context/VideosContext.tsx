@@ -7,6 +7,7 @@ import {
 } from "react";
 import useFetchVideos, { VideoProps } from "../hooks/UseFetchVideos";
 import Loader from "../components/shared/Loader";
+import styled from "styled-components";
 
 interface DefaultValueProps {
   videos: VideoProps[];
@@ -33,7 +34,12 @@ const VideosContext = ({ children }: { children: ReactNode }) => {
     fetchVideos();
   }, [fetchVideos]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <StyledWrapper>
+        <Loader />
+      </StyledWrapper>
+    );
   if (videos.length <= 0) return <div>No videos found</div>;
 
   return (
@@ -45,3 +51,10 @@ const VideosContext = ({ children }: { children: ReactNode }) => {
 
 export default VideosContext;
 export const useVideoContext = () => useContext(Context);
+
+const StyledWrapper = styled.div`
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100vh;
+`;

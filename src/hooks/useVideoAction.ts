@@ -29,32 +29,6 @@ const useLikeAction = (videoId: string) => {
     }
   }, [isLiked]);
 
-  // const handleLikeVideo = useCallback(async () => {
-  //   try {
-  //     const res = await authAxios.post("/like", {
-  //       videoId,
-  //     });
-  //     const {liked, likeCount} = res.data;
-  //     setIsLiked(liked);
-  //     setLikeCount(likeCount);
-  //   } catch (error) {
-  //     toast.error("An error occurred whle liking video");
-  //   }
-  // }, []);
-
-  // const handleUnlikeVideo = useCallback(async () => {
-  //   try {
-  //     const res = await authAxios.post("/unlike", {
-  //       videoId,
-  //     });
-  //     const {liked, likeCount} = res.data;
-  //     setIsLiked(liked);
-  //     setLikeCount(likeCount);
-  //   } catch (error) {
-  //     toast.error("An error occurred whle liking video");
-  //   }
-  // },[]);
-
   const handleCheckLiked = useCallback(async () => {
     try {
       const res = await authAxios.get(`/videos/${videoId}/checklike`);
@@ -65,8 +39,6 @@ const useLikeAction = (videoId: string) => {
   }, []);
 
   return {
-    // handleLikeVideo,
-    // handleUnlikeVideo,
     handleToggleLike,
     handleCheckLiked,
     isLiked,
