@@ -259,6 +259,10 @@ Error generating stack: `+n.message+`
     cursor: pointer;
   }
 
+  @media screen and (max-width: 500px) {
+    align-self: center;
+  }
+
   .swiper {
     max-width: 600px;
   }
