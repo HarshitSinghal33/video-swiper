@@ -3,7 +3,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import VideoTimingLine from "./VideoTimingLine";
 import styled from "styled-components";
 import { VideoProps } from "../../hooks/UseFetchVideos";
-import Loader from "../shared/Loader";
 import Video from "../shared/Video";
 
 interface VideoContainerProps {
@@ -11,7 +10,6 @@ interface VideoContainerProps {
   isMuted: boolean;
   handleMute: () => void;
   video: VideoProps;
-  isInSlide: boolean;
 }
 
 interface StyledWrapperProps {
@@ -23,7 +21,6 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
   isMuted,
   handleMute,
   video,
-  isInSlide,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
@@ -41,7 +38,7 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
     }
-  }, []);
+  }, [isMuted]);
 
   const toggleVideoPlay = useCallback(() => {
     const videoElement = videoRef.current;
@@ -78,8 +75,6 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
     }
   }, [isActive, videoRef]);
 
-  if (!isInSlide) return <Loader />;
-
   return (
     <Wrapper $isActive={isActive}>
       <VideoTimingLine
@@ -94,7 +89,7 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
         toggleVideosMute={toggleVideosMute}
         video={video}
       />
-      <Video ref={videoRef} muted={isMuted} loop={true} src={video.url} />
+      <Video ref={videoRef} isVideoPlaying={isVideoPlaying && isActive} muted={isMuted} loop={true} src={video.url} />
     </Wrapper>
   );
 };

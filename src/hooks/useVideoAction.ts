@@ -1,40 +1,37 @@
 import { toast } from "react-toastify";
 import authAxios from "../lib/authAxios";
 import { useCallback, useState } from "react";
+import { useVideoContext } from "../context/VideosContext";
 
 const useLikeAction = (videoId: string) => {
+  const { videos, handleUpdateVideosData } = useVideoContext();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(0);
 
-  const handleLikeVideo = useCallback(async () => {
+  const handleToggleLike = useCallback(async () => {
     try {
-      const res = await authAxios.post("/like", {
+      const res = await authAxios.post(isLiked ? "/unlike" : "/like", {
         videoId,
       });
-      const {liked, likeCount} = res.data;
+      const {liked, likeCount: updatedLikeCount} = res.data;
       setIsLiked(liked);
-      setLikeCount(likeCount);
-    } catch (error) {
-      toast.error("An error occurred whle liking video");
-    }
-  }, []);
+      setLikeCount(updatedLikeCount);
 
-  const handleUnlikeVideo = useCallback(async () => {
-    try {
-      const res = await authAxios.post("/unlike", {
-        videoId,
-      });
-      const {liked, likeCount} = res.data;
-      setIsLiked(liked);
-      setLikeCount(likeCount);
+      handleUpdateVideosData(
+        videos.map((video) =>
+          video.id === videoId
+            ? { ...video, likeCount: updatedLikeCount }
+            : video
+        )
+      );
     } catch (error) {
-      toast.error("An error occurred whle liking video");
+      toast.error(`An error occurred ${isLiked ? "unliking" : "liking"} video`);
     }
-  },[]);
+  }, [isLiked]);
 
   const handleCheckLiked = useCallback(async () => {
     try {
-      const res = await authAxios.get(`/videos/${videoId}/like`);
+      const res = await authAxios.get(`/videos/${videoId}/checklike`);
       setIsLiked(res.data.liked);
     } catch (error) {
       toast.error("An error occurred while fetching like.");
@@ -42,8 +39,7 @@ const useLikeAction = (videoId: string) => {
   }, []);
 
   return {
-    handleLikeVideo,
-    handleUnlikeVideo,
+    handleToggleLike,
     handleCheckLiked,
     isLiked,
     likeCount,
